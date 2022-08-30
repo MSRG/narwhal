@@ -1,7 +1,7 @@
 {"ip_list" : [
-    {"name" : "narwhal-inst-1", "ip" : ["192.168.41.111"]},
-    {"name" : "narwhal-inst-2", "ip" : ["192.168.41.121"]},
-    {"name" : "narwhal-inst-3", "ip" : ["192.168.41.226"]},
-    {"name" : "narwhal-inst-4", "ip" : ["192.168.41.124"]}
+    {"name" : "narwhal-inst-1", "ip" : ["192.168.41.221"]},
+    {"name" : "narwhal-inst-2", "ip" : ["192.168.41.34"]},
+    {"name" : "narwhal-inst-3", "ip" : ["192.168.41.121"]},
+    {"name" : "narwhal-inst-4", "ip" : ["192.168.41.230"]}
 ]
 }
