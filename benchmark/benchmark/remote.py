@@ -95,8 +95,16 @@ class Bench:
         except GroupException as e:
             raise BenchError('Failed to kill nodes', FabricError(e))
 
-    def _select_hosts(self):
+    def _select_hosts(self, bench_parameters):
         # Collocate the primary and its workers on the same machine.
+        if bench_parameters.collocate:
+            nodes = max(bench_parameters.nodes)
+
+            # Ensure there are enough hosts.
+            hosts = self.manager.hosts()
+            if sum(len(x) for x in hosts.values()) < nodes:
+                return []
+
         selected = []
 
          # read from json file to get the ip address
@@ -106,14 +114,7 @@ class Bench:
             host = ip_obj['ip'][0]
             selected.append(host)
         return selected
-        # if bench_parameters.collocate:
-        #     nodes = max(bench_parameters.nodes)
-
-        #     # Ensure there are enough hosts.
-        #     hosts = self.manager.hosts()
-        #     if sum(len(x) for x in hosts.values()) < nodes:
-        #         return []
-
+        
         #     # Select the hosts in different data centers.
         #     ordered = zip(*hosts.values())
         #     ordered = [x for y in ordered for x in y]
@@ -348,11 +349,11 @@ class Bench:
             return
 
         # Update nodes.
-        # try:
-        #     self._update(selected_hosts, bench_parameters)
-        # except (GroupException, ExecutionError) as e:
-        #     e = FabricError(e) if isinstance(e, GroupException) else e
-        #     raise BenchError('Failed to update nodes', e)
+        try:
+            self._update(selected_hosts, bench_parameters)
+        except (GroupException, ExecutionError) as e:
+            e = FabricError(e) if isinstance(e, GroupException) else e
+            raise BenchError('Failed to update nodes', e)
 
         # Upload all configuration files.
         try:
