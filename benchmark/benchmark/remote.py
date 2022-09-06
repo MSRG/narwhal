@@ -113,11 +113,8 @@ class Bench:
         self._check_stderr(output)
 
     def _update(self, hosts, bench_parameters):
-        if bench_parameters.collocate:
-            ips = list(set(hosts))
-        else:
-            ips = list(set([x for y in hosts for x in y]))
-
+        ips = list(set(hosts))
+        
         Print.info(
             f'Updating {len(ips)} machines (branch "{self.settings.branch}")...'
         )
