@@ -95,7 +95,7 @@ class Bench:
         except GroupException as e:
             raise BenchError('Failed to kill nodes', FabricError(e))
 
-    def _select_hosts(self, bench_parameters):
+    def _select_hosts(self):
         selected = []
         # read from json file to get the ip address
         json_file = open('ip-configs.json')
