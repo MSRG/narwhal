@@ -96,18 +96,8 @@ class Bench:
             raise BenchError('Failed to kill nodes', FabricError(e))
 
     def _select_hosts(self, bench_parameters):
-        # Collocate the primary and its workers on the same machine.
-        if bench_parameters.collocate:
-            nodes = max(bench_parameters.nodes)
-
-            # Ensure there are enough hosts.
-            hosts = self.manager.hosts()
-            if sum(len(x) for x in hosts.values()) < nodes:
-                return []
-
         selected = []
-
-         # read from json file to get the ip address
+        # read from json file to get the ip address
         json_file = open('ip-configs.json')
         addresses = json.load(json_file)
         for ip_obj in addresses['ip_list']:
@@ -115,31 +105,6 @@ class Bench:
             selected.append(host)
         return selected
         
-        #     # Select the hosts in different data centers.
-        #     ordered = zip(*hosts.values())
-        #     ordered = [x for y in ordered for x in y]
-        #     return ordered[:nodes]
-
-        # Spawn the primary and each worker on a different machine. Each
-        # authority runs in a single data center.
-        # else:
-        #     primaries = max(bench_parameters.nodes)
-
-        #     # Ensure there are enough hosts.
-        #     hosts = self.manager.hosts()
-        #     if len(hosts.keys()) < primaries:
-        #         return []
-        #     for ips in hosts.values():
-        #         if len(ips) < bench_parameters.workers + 1:
-        #             return []
-
-        #     # Ensure the primary and its workers are in the same region.
-        #     selected = []
-        #     for region in list(hosts.keys())[:primaries]:
-        #         ips = list(hosts[region])[:bench_parameters.workers + 1]
-        #         selected.append(ips)
-        #     return selected
-
     def _background_run(self, host, command, log_file):
         name = splitext(basename(log_file))[0]
         cmd = f'tmux new -d -s "{name}" "{command} |& tee {log_file}"'
