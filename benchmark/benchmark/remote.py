@@ -272,12 +272,22 @@ class Bench:
                 c = Connection(host, user='ubuntu',
                                connect_kwargs=self.connect)
                 c.get(
-                    PathMaker.client_log_file(i, id),
-                    local=PathMaker.client_log_file(i, id)
-                )
-                c.get(
                     PathMaker.worker_log_file(i, id),
                     local=PathMaker.worker_log_file(i, id)
+                )
+
+        # Download client log files.
+        workers_addresses = worker_cache.workers_addresses(3)
+        progress = progress_bar(
+            workers_addresses, prefix='Downloading client logs:')
+        for i, addresses in enumerate(progress):
+            for id, address in addresses:
+                host = address.split(':')[1].strip("/")
+                c = Connection(host, user='ubuntu',
+                               connect_kwargs=self.connect)
+                c.get(
+                    PathMaker.client_log_file(i, id),
+                    local=PathMaker.client_log_file(i, id)
                 )
 
         primary_addresses = committee.primary_addresses(faults)
