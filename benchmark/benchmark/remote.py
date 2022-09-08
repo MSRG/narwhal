@@ -205,7 +205,7 @@ class Bench:
         # Filter all faulty nodes from the client addresses (or they will wait
         # for the faulty nodes to be online).
         Print.info('Booting clients...')
-        workers_addresses = worker_cache.workers_addresses(faults)
+        workers_addresses = worker_cache.workers_addresses(3)
         rate_share = ceil(rate / worker_cache.workers())
         for i, addresses in enumerate(workers_addresses):
             for (id, address) in addresses:
