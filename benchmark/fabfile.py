@@ -177,11 +177,11 @@ def remote(ctx, debug=False):
         'faults': 0,
         'nodes': [4],
         'workers': 1,
-        'collocate': True,
-        'rate': [50_000],
+        'collocate': False,
+        'rate': [1_000_000_000],
         'tx_size': 32,
         'duration': 120,
-        'runs': 10,
+        'runs': 2,
         'mem_profiling': False
     }
     node_params = {
