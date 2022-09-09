@@ -7,7 +7,7 @@ from multiprocessing import Pool
 from os.path import join
 from re import findall, search
 from statistics import mean
-
+from csv import writer
 
 from benchmark.utils import Print
 
@@ -210,6 +210,25 @@ class LogParser:
         consensus_tps, consensus_bps, _ = self._consensus_throughput()
         end_to_end_tps, end_to_end_bps, duration = self._end_to_end_throughput()
         end_to_end_latency = self._end_to_end_latency() * 1_000
+
+        # # field names
+        # fields = [
+        #     'Committe Size', 'Faults', 'rate', 'Transaction size', 'batch size',
+        #     'Consensus TPS', 'Consensus BPS', 'Consensus latency', 'End-to-end TPS',
+        #     'End-to-end BPS', 'End-to-end latency'
+        # ]       
+
+        data = [self.committee_size, self.faults, sum(self.rate), self.size[0], batch_size, round(consensus_tps), round(consensus_bps), round(consensus_latency),
+        round(end_to_end_tps), round(end_to_end_bps), round(end_to_end_latency) ]
+
+        with open('/home/ubuntu/results.csv', 'a', newline='') as f_object:  
+            # Pass the CSV  file object to the writer() function
+            writer_object = writer(f_object)
+            # Result - a writer object
+            # Pass the data in the list as an argument into the writerow() function
+            writer_object.writerow(data)  
+            # Close the file object
+            f_object.close()
 
         return (
             '\n'
