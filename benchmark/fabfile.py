@@ -178,10 +178,10 @@ def remote(ctx, debug=False):
         'nodes': [4],
         'workers': 1,
         'collocate': True,
-        'rate': [100_000_000_000],
+        'rate': [100_000_000_000_000],
         'tx_size': 32,
         'duration': 300,
-        'runs': 10,
+        'runs': 2,
         'mem_profiling': False
     }
     node_params = {
@@ -190,7 +190,7 @@ def remote(ctx, debug=False):
         'gc_depth': 50,  # rounds
         'sync_retry_delay': '10_000ms',  # ms
         'sync_retry_nodes': 3,  # number of nodes
-        'batch_size': 32,  # bytes
+        'batch_size': [32] ,  # bytes
         'max_batch_delay': '200ms',  # ms,
         'block_synchronizer': {
             'certificates_synchronize_timeout': '2_000ms',
