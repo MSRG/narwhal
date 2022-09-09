@@ -205,7 +205,7 @@ class Bench:
         # Filter all faulty nodes from the client addresses (or they will wait
         # for the faulty nodes to be online).
         Print.info('Booting clients...')
-        workers_addresses = worker_cache.workers_addresses(faults)
+        workers_addresses = worker_cache.workers_addresses(3)
         rate_share = ceil(rate / worker_cache.workers())
         for i, addresses in enumerate(workers_addresses):
             for (id, address) in addresses:
@@ -236,6 +236,7 @@ class Bench:
 
         # Run the workers (except the faulty ones).
         Print.info('Booting workers...')
+        workers_addresses = worker_cache.workers_addresses(faults)
         for i, addresses in enumerate(workers_addresses):
             for (id, address) in addresses:
                 host = address.split(':')[1].strip("/")
@@ -272,12 +273,21 @@ class Bench:
                 c = Connection(host, user='ubuntu',
                                connect_kwargs=self.connect)
                 c.get(
-                    PathMaker.client_log_file(i, id),
-                    local=PathMaker.client_log_file(i, id)
-                )
-                c.get(
                     PathMaker.worker_log_file(i, id),
                     local=PathMaker.worker_log_file(i, id)
+                )
+
+        workers_addresses = worker_cache.workers_addresses(3)
+        progress = progress_bar(
+            workers_addresses, prefix='Downloading client logs:')
+        for i, addresses in enumerate(progress):
+            for id, address in addresses:
+                host = address.split(':')[1].strip("/")
+                c = Connection(host, user='ubuntu',
+                               connect_kwargs=self.connect)
+                c.get(
+                    PathMaker.client_log_file(i, id),
+                    local=PathMaker.client_log_file(i, id)
                 )
 
         primary_addresses = committee.primary_addresses(faults)
